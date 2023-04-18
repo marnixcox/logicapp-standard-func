@@ -22,5 +22,4 @@
                                                       { "subscriptionName" : "abc", "sqlExpression" : "sys.To='abc'" } ] }
         ] }
   }
-  }
 }
