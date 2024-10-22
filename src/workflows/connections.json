@@ -1,0 +1,18 @@
+{
+    "functionConnections": {
+        "azureFunctionOperation": {
+            "authentication": {
+                "name": "Code",
+                "type": "QueryString",
+                "value": "@appsetting('FunctionAppKey')"
+            },
+            "displayName": "fa",
+            "function": {
+                "id": "/subscriptions/@{appsetting('WORKFLOWS_SUBSCRIPTION_ID')}/resourceGroups/@{appsetting('WORKFLOWS_RESOURCE_GROUP_NAME')}/providers/Microsoft.Web/sites/@{appsetting('FunctionAppName')}/functions/SalesOrderMapping"
+            },
+            "triggerUrl": "https://@{appsetting('FunctionAppName')}.azurewebsites.net/api/salesordermapping"
+        }
+    },
+    "managedApiConnections": {},
+    "serviceProviderConnections": {}
+}

@@ -1,0 +1,36 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - develop
+  paths:
+    exclude:
+    - README.md
+
+stages:
+- stage: Development
+  variables:
+   AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+   AZURE_ENV_NAME: dev
+   AZURE_LOCATION: $(AZURE_LOCATION)
+  jobs:
+  - job: Development
+    pool:
+        vmImage: ubuntu-latest
+    steps:
+     - template: azdcli.yml
+       parameters:
+        serviceConnection: azconnection
+- stage: Test
+  variables:
+   AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+   AZURE_ENV_NAME: tst
+   AZURE_LOCATION: $(AZURE_LOCATION)
+  jobs:
+  - job: Test
+    pool:
+        vmImage: ubuntu-latest
+    steps:
+     - template: azdcli.yml
+       parameters:
+        serviceConnection: azconnection

@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: logicapp-standard-func
+infra:
+    provider: "bicep"
+services:
+  functions:
+    project: ./src/functions
+    host: function
+    language: dotnet
+  workflows:
+    project: ./src/workflows
+    host: function
+    language: js
+
