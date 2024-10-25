@@ -103,8 +103,8 @@ In order to setup the Function Connections in the [**connections.json**](https:/
 <img src="assets/configuration.png" width="75%" alt="Deploy">
 
 
-### CI/CD
+### Deployment pipelines
 
 This template includes pipelines for a staged dev/tst/acc/prd deployment for a `develop` and `main` branch. Make sure to update the `serviceConnection` and  `AZURE_SUBSCRIPTION_ID` accordingly. 
 
-
+<img src="assets/cicd.png" width="75%" alt="Deployment">
