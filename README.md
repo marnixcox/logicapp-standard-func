@@ -14,7 +14,7 @@ It needs to be used together with an [**integration-hub**](https://github.com/ma
 
 This template utilizes the following Azure resources:
 
-- [**Azure Logic App Standard**](https://docs.microsoft.com/azure/logic-app-standard/) to design the workflows
+- [**Azure Logic App Standard**](https://learn.microsoft.com/azure/logic-apps/) to design the workflows
 - [**Azure Function Apps**](https://docs.microsoft.com/azure/azure-functions/) to host the custom code
 - [**Azure Monitor**](https://docs.microsoft.com/azure/azure-monitor/) for monitoring and logging
 - [**Azure Key Vault**](https://docs.microsoft.com/azure/key-vault/) for securing secrets
