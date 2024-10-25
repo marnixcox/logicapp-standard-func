@@ -94,7 +94,7 @@ module appServicePlan './core/host/appserviceplan.bicep' = {
       tier: 'Dynamic'
     }
   }
-  dependsOn: [ storage ]
+  dependsOn: [ storage, keyVault ]
 }
 
 // Azure Functions
@@ -116,6 +116,7 @@ module appServicePlan './core/host/appserviceplan.bicep' = {
       appServicePlan
       storage
       monitoring
+      keyVault
     ]
   }
 
@@ -153,34 +154,6 @@ module workflows './app/workflows.bicep' = {
     storage
     monitoring
   ]
-}
-
-  // Functions access to Key Vault
-module functionsKeyVaultAccess './core/security/keyvault-access.bicep' = {
-  name: 'functions-keyvault-access'
-  scope: rg
-  params: {
-    keyVaultName: keyVault.outputs.name
-    principalId: functions.outputs.SERVICE_FUNCTIONS_IDENTITY_PRINCIPAL_ID
-  }
-  dependsOn: [
-    workflows
-    keyVault
-   ]
-}
-
-// Logic App Standard Workflows access to Key Vault
-module workflowsKeyVaultAccess './core/security/keyvault-access.bicep' = {
-  name: 'logic-keyvault-access'
-  scope: rg
-  params: {
-    keyVaultName: keyVault.outputs.name
-    principalId: workflows.outputs.logicAppManagedIdentityId
-  }
-  dependsOn: [
-    workflows
-    keyVault
-   ]
 }
 
 // App outputs

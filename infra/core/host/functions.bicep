@@ -1,3 +1,4 @@
+metadata description = 'Creates an Azure Function in an existing Azure App Service plan.'
 param name string
 param location string = resourceGroup().location
 param tags object = {}
@@ -6,8 +7,10 @@ param tags object = {}
 param applicationInsightsName string = ''
 param appServicePlanId string
 param keyVaultName string = ''
-param managedIdentity bool = !empty(keyVaultName)
+param managedIdentity bool = !empty(keyVaultName) || storageManagedIdentity
 param storageAccountName string
+param storageManagedIdentity bool = false
+param virtualNetworkSubnetId string = ''
 
 // Runtime Properties
 @allowed([
@@ -30,6 +33,7 @@ param kind string = 'functionapp,linux'
 param allowedOrigins array = []
 param alwaysOn bool = true
 param appCommandLine string = ''
+@secure()
 param appSettings object = {}
 param clientAffinityEnabled bool = false
 param enableOryxBuild bool = contains(kind, 'linux')
@@ -39,6 +43,7 @@ param minimumElasticInstanceCount int = -1
 param numberOfWorkers int = -1
 param scmDoBuildDuringDeployment bool = true
 param use32BitWorkerProcess bool = false
+param healthCheckPath string = ''
 
 module functions 'appservice.bicep' = {
   name: '${name}-functions'
@@ -52,13 +57,15 @@ module functions 'appservice.bicep' = {
     applicationInsightsName: applicationInsightsName
     appServicePlanId: appServicePlanId
     appSettings: union(appSettings, {
-        AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};AccountKey=${storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+        AzureWebJobsStorage__accountName: storageManagedIdentity ? storage.name : null
+        AzureWebJobsStorage: storageManagedIdentity ? null : 'DefaultEndpointsProtocol=https;AccountName=${storage.name};AccountKey=${storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
         FUNCTIONS_EXTENSION_VERSION: extensionVersion
         FUNCTIONS_WORKER_RUNTIME: runtimeName
       })
     clientAffinityEnabled: clientAffinityEnabled
     enableOryxBuild: enableOryxBuild
     functionAppScaleLimit: functionAppScaleLimit
+    healthCheckPath: healthCheckPath
     keyVaultName: keyVaultName
     kind: kind
     linuxFxVersion: linuxFxVersion
@@ -70,6 +77,17 @@ module functions 'appservice.bicep' = {
     runtimeNameAndVersion: runtimeNameAndVersion
     scmDoBuildDuringDeployment: scmDoBuildDuringDeployment
     use32BitWorkerProcess: use32BitWorkerProcess
+    virtualNetworkSubnetId: virtualNetworkSubnetId
+  }
+}
+
+module storageOwnerRole '../../core/security/role.bicep' = if (storageManagedIdentity) {
+  name: 'search-index-contrib-role-api'
+  params: {
+    principalId: functions.outputs.identityPrincipalId
+    // Search Index Data Contributor
+    roleDefinitionId: '8ebe5a00-799e-43f5-93ac-243d3dce84a7'
+    principalType: 'ServicePrincipal'
   }
 }
 

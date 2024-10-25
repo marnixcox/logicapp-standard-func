@@ -10,16 +10,6 @@
     },
     "principalId": {
       "value": "${AZURE_PRINCIPAL_ID}"
-    },
-    "serviceBusQueuesNames": {
-      "value": [
-        "invoices"
-      ]
-    },
-    "serviceBusTopicNames": {
-      "value": [
-        { "topicName" : "orders", "subscriptions" : [ { "subscriptionName" : "all", "sqlExpression" : "1=1" },
-                                                      { "subscriptionName" : "abc", "sqlExpression" : "sys.To='abc'" } ] }
-        ] }
+    }
   }
 }

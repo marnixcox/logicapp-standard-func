@@ -30,7 +30,7 @@ Now the magic happens. The template contents will be downloaded into your projec
 
 ### Contents
 
-The following folder structure is created. Where `corelocal` is added to extend the standard set of core infra files.
+The following folder structure is created. 
 
 ```
 ├── infra                      [ Infrastructure As Code files ]
@@ -38,14 +38,17 @@ The following folder structure is created. Where `corelocal` is added to extend 
 │   ├── main.parameters.json   [ Parameters file ]
 │   ├── app                    [ Infra files specifically added for this template ]
 │   ├── avm                    [ Azure Verified Modules ]
-│   ├── core                   [ Full set of infra files provided by Azure Developer CLI team ]
-│   └── corelocal              [ Extension on original core files ]
+│   └── core                   [ Full set of infra files provided by Azure Developer CLI team  ]
 ├── src                        [ Application code ]
 │   ├── functions              [ Azure Functions ]
 │   └── workflows              [ Azure Logic App Standard ]
 └── azure.yaml                 [ Describes the app and type of Azure resources ]
 
 ```
+
+### Prerequisites
+
+- Install [**integration-hub**](https://github.com/marnixcox/integration-hub) first.
 
 ### Provision Infrastructure 
 
