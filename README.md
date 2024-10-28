@@ -48,7 +48,7 @@ The following folder structure is created.
 
 ### Prerequisites
 
-- Install [**integration-hub**](https://github.com/marnixcox/integration-hub) first.
+- Install [**integration-hub**](https://github.com/marnixcox/integration-hub) first with the same enviroment name as **logicapp-standard-func**
 
 ### Provision Infrastructure 
 
