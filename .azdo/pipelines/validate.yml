@@ -1,0 +1,13 @@
+parameters:
+- name: serviceConnection
+  type: string
+
+steps:
+- task: AzureCLI@2
+  displayName: "Lint Bicep"
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az bicep lint --file ./infra/main.bicep 

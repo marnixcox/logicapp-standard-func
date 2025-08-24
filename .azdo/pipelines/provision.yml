@@ -1,0 +1,32 @@
+parameters:
+- name: serviceConnection
+  type: string
+
+steps:
+- task: Bash@3
+  displayName: Install azd
+  inputs:
+    targetType: 'inline'
+    script: |
+      curl -fsSL https://aka.ms/install-azd.sh | bash
+- task: PowerShell@2
+  displayName: Configure AZD to Use AZ CLI Authentication.
+  inputs:
+    targetType: inline
+    script: |
+      azd config set auth.useAzCliAuth "true"
+    pwsh: true
+
+- task: AzureCLI@2
+  displayName: Provision $(AZURE_ENV_NAME) Infrastructure
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptType: bash
+    scriptLocation: inlineScript
+    keepAzSessionActive: true
+    inlineScript: |
+      azd provision --no-prompt
+  env:
+    AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+    AZURE_ENV_NAME: $(AZURE_ENV_NAME)
+    AZURE_LOCATION: $(AZURE_LOCATION)

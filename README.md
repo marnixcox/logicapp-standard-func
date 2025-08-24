@@ -35,16 +35,23 @@ The following folder structure is created.
 ```
 ├── infra                      [ Infrastructure As Code files ]
 │   ├── main.bicep             [ Main infrastructure file ]
-│   ├── main.parameters.json   [ Parameters file ]
-│   ├── app                    [ Infra files specifically added for this template ]
-│   ├── avm                    [ Azure Verified Modules ]
-│   └── core                   [ Full set of infra files provided by Azure Developer CLI team  ]
+│   └── main.parameters.json   [ Parameters file ]
 ├── src                        [ Application code ]
 │   ├── functions              [ Azure Functions ]
 │   └── workflows              [ Azure Logic App Standard ]
 └── azure.yaml                 [ Describes the app and type of Azure resources ]
 
 ```
+
+### Key Infrastructure Files
+- `main.bicep` - Main orchestration
+- `monitoring.bicep` - Observability stack
+- `storage.bicep` - Storage account for Function and Logic App  
+- `functions.bicep` - Function App  
+- `functions-key.bicep` - Function App key to be stored in Key Vault
+- `workflows.bicep` - Logic App  
+- `keyvault.bicep` - Key Vault
+- `servicebus.bicep` - Service Bus
 
 ### Prerequisites
 
@@ -105,6 +112,13 @@ In order to setup the Function Connections in the [**connections.json**](https:/
 
 ### Deployment pipelines
 
-This template includes pipelines for a staged dev/tst/acc/prd deployment for a `develop` and `main` branch. Make sure to update the `serviceConnection` and  `AZURE_SUBSCRIPTION_ID` accordingly. 
+This template includes pipelines for a `build once, deploy everywhere` pattern. Make sure to update the `serviceConnection` and  `AZURE_SUBSCRIPTION_ID` accordingly. 
 
-<img src="assets/cicd.png" width="75%" alt="Deployment">
+- `main.yml` - Branch trigger 
+- `validate.yml` - Validate infra code
+- `package.yml` - Package src code
+- `provision.yml` - Provision infra
+- `deploy.yml` - Deploy src
+
+
+

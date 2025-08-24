@@ -4,45 +4,86 @@ trigger:
     include:
     - main
     - release/*
+    - feature/*
   paths:
     exclude:
     - README.md
-
 stages:
-- stage: Acceptance
+- stage: Build
   variables:
-   AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
-   AZURE_ENV_NAME: acc
-   AZURE_LOCATION: $(AZURE_LOCATION)
+    AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+    AZURE_ENV_NAME: dev
+    AZURE_LOCATION: $(AZURE_LOCATION)
   jobs:
-  - deployment: 'Acceptance'
-    environment: acc
+  - job: validate
     pool:
-     vmImage: ubuntu-latest
-    strategy:
-        runOnce:
-         deploy:
-          steps:
-          - checkout: self
-          - template: azdcli.yml
-            parameters:
-             serviceConnection: azconnection
+      vmImage: ubuntu-latest
+    steps:
+    - template: validate.yml
+      parameters:
+        serviceConnection: azconnection
+  - job: azd_package
+    dependsOn: validate
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - template: package.yml
+      parameters:
+        serviceConnection: azconnection
+        app: functions
+    - template: package.yml
+      parameters:
+        serviceConnection: azconnection
+        app: workflows
+
+- stage: Development
+  variables:
+    AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+    AZURE_ENV_NAME: dev
+    AZURE_LOCATION: $(AZURE_LOCATION)
+  jobs:
+  - job: azd_provision_deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - template: validate.yml
+      parameters:
+        serviceConnection: azconnection
+    - template: provision.yml
+      parameters:
+        serviceConnection: azconnection
+    - template: deploy.yml
+      parameters:
+        serviceConnection: azconnection
+        app: functions
+    - template: deploy.yml
+      parameters:
+        serviceConnection: azconnection
+        app: workflows
 
 - stage: Production
   variables:
-   AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
-   AZURE_ENV_NAME: prd
-   AZURE_LOCATION: $(AZURE_LOCATION)
+    AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+    AZURE_ENV_NAME: prd
+    AZURE_LOCATION: $(AZURE_LOCATION)
   jobs:
-  - deployment: 'Production'
+  - deployment: azd_provision_deploy
     environment: prd
     pool:
-     vmImage: ubuntu-latest
+      vmImage: ubuntu-latest
     strategy:
-        runOnce:
-          deploy:
-           steps:
-           - checkout: self
-           - template: azdcli.yml
-             parameters:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - template: provision.yml
+            parameters:
               serviceConnection: azconnection
+          - template: deploy.yml
+            parameters:
+              serviceConnection: azconnection
+              app: functions
+          - template: deploy.yml
+            parameters:
+              serviceConnection: azconnection
+              app: workflows

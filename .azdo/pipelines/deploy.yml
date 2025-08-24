@@ -1,0 +1,37 @@
+parameters:
+- name: serviceConnection
+  type: string
+- name: app
+  type: string
+
+steps:
+- task: Bash@3
+  displayName: Install azd
+  inputs:
+    targetType: 'inline'
+    script: |
+      curl -fsSL https://aka.ms/install-azd.sh | bash
+- task: PowerShell@2
+  displayName: Configure AZD to Use AZ CLI Authentication.
+  inputs:
+    targetType: inline
+    script: |
+      azd config set auth.useAzCliAuth "true"
+    pwsh: true
+
+- task: DownloadPipelineArtifact@2
+  displayName: Download Package Artifact
+  inputs:
+    buildType: 'current'
+    artifactName: '${{ parameters.app }}-package'
+    targetPath: './artifacts'
+
+- task: AzureCLI@2
+  displayName: Deploy ${{ parameters.app }} to $(AZURE_ENV_NAME)
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptType: bash
+    scriptLocation: inlineScript
+    keepAzSessionActive: true
+    inlineScript: |
+      azd deploy ${{ parameters.app }} --from-package ./artifacts/${{ parameters.app }}-package.zip --no-prompt
