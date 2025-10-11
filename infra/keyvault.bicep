@@ -16,10 +16,13 @@ param environmentName string
 @description('Log Analytics workspace Resource id')
 param logAnalyticsWorkspaceResourceId string
 
+@description('User Assigned Managed Identity Resource ID for the Logic App')
 param logicAppIdentity string
 
+@description('User Assigned Managed Identity Resource ID for the Function App')
 param functionsIdentity string
 
+// Key Vault
 module keyvault 'br/public:avm/res/key-vault/vault:0.13.1' = {
   name: 'keyvault'
   params: {
@@ -41,4 +44,5 @@ module keyvault 'br/public:avm/res/key-vault/vault:0.13.1' = {
 }
 
 // Outputs for use by other modules
+@description('The name of the Key Vault')
 output keyVaultName string = keyvault.outputs.name

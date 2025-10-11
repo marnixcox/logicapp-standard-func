@@ -43,16 +43,6 @@ The following folder structure is created.
 
 ```
 
-### Key Infrastructure Files
-- `main.bicep` - Main orchestration
-- `monitoring.bicep` - Observability stack
-- `storage.bicep` - Storage account for Function and Logic App  
-- `functions.bicep` - Function App  
-- `functions-key.bicep` - Function App key to be stored in Key Vault
-- `workflows.bicep` - Logic App  
-- `keyvault.bicep` - Key Vault
-- `servicebus.bicep` - Service Bus
-
 ### Prerequisites
 
 - Install [**integration-hub**](https://github.com/marnixcox/integration-hub) first with the same environment name as **logicapp-standard-func**
@@ -104,8 +94,8 @@ Both Logic App Standard and Functions are granted access to the Key Vault.
 
 In order to setup the Function Connections in the [**connections.json**](https://learn.microsoft.com/en-us/azure/logic-apps/devops-deployment-single-tenant-azure-logic-apps) file the following parameters are available in the Logic App Standard instance:
 
-`FunctionAppKey`
-`FunctionAppName`
+`FUNCTIONAPP_KEY`
+`FUNCTIONAPP_NAME`
 
 <img src="assets/configuration.png" width="75%" alt="Deploy">
 

@@ -34,6 +34,7 @@ param applicationInsightsConnectionString string
 @description('Function app settings')
 param appsettings object
 
+// App Service Plan for the Function App
 module functionAppPlan 'br/public:avm/res/web/serverfarm:0.5.0' = {
   name: 'functionAppPlan'
   params: {
@@ -51,6 +52,7 @@ module functionAppPlan 'br/public:avm/res/web/serverfarm:0.5.0' = {
   }
 }
 
+// Function App Access Key to be stored in Key Vault
 module functionsKey './functions-key.bicep' = {
   name: 'functions-key'
   params: {
@@ -63,6 +65,7 @@ module functionsKey './functions-key.bicep' = {
   ]
 }
 
+// 
 var coreAppSettings = {
   APPLICATIONINSIGHTS_CONNECTION_STRING: applicationInsightsConnectionString
   FUNCTIONS_EXTENSION_VERSION: '~4'
@@ -73,6 +76,7 @@ var coreAppSettings = {
   WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${listKeys(resourceId('Microsoft.Storage/storageAccounts', storageAccountName), '2015-05-01-preview').key1}'
 }
 
+// Function App
 module functionApp 'br/public:avm/res/web/site:0.19.0' = {
   name: '${deployment().name}-${name}'
   params: {
@@ -103,4 +107,5 @@ module functionApp 'br/public:avm/res/web/site:0.19.0' = {
 }
 
 // Outputs for use by other modules
+@description('The name of the Function App')
 output FunctionAppName string = functionApp.outputs.name

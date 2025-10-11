@@ -22,6 +22,7 @@ param functionAppIdentity string
 @description('Log Analytics workspace Resource id')
 param logAnalyticsWorkspaceResourceId string
 
+// Storage Account for Logic Apps and Function Apps
 module storage 'br/public:avm/res/storage/storage-account:0.26.0' = {
   name: 'storage'
   params: {

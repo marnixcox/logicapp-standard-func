@@ -81,8 +81,8 @@ module workflows './workflows.bicep' = {
     storageAccountName: storage.outputs.storageAccountName
     logicAppIdentity: logicIdentity.outputs.resourceId
     appsettings: {
-      FunctionAppKey: '@Microsoft.KeyVault(SecretUri=${keyvault.outputs.keyVaultName}.vault.azure.net/secrets/FunctionAppKey)'
-      FunctionAppName: functions.outputs.FunctionAppName
+      FUNCTIONAPP_KEY: '@Microsoft.KeyVault(SecretUri=${keyvault.outputs.keyVaultName}.vault.azure.net/secrets/FunctionAppKey)'
+      FUNCTIONAPP_NAME: functions.outputs.FunctionAppName
     }
   }
 
