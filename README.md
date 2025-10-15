@@ -34,7 +34,7 @@ The following folder structure is created.
 
 ```
 ├── infra                      [ Infrastructure As Code files ]
-│   ├── functions              [ Key Vault files ]
+│   ├── functions              [ Function files ]
 │   ├── keyvault               [ Key Vault files ]
 │   ├── logicapp               [ Logic app files ]
 │   ├── storage                [ Storage files ]
