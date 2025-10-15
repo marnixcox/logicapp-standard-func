@@ -1,17 +1,17 @@
-@description('Name of the Function App')
+@description('The name of the Function App')
 param functionAppName string
 
-@description('Location for all resources.')
+@description('The location used for all deployed resources')
 param location string = resourceGroup().location
 
-@description('Tags to be applied to all resources.')
+@description('Tags that will be applied to all resources')
 param tags object 
 
-@description()
+@description('Key vault to store function app access key')
 param keyVaultName string
 
-// Store the Function App master key in Key Vault
-module keyVaultSecret 'keyvault-secret.bicep' = {
+// Store Function App Access Key in Key Vault
+module keyVaultSecret '../keyvault/keyvault-secret.bicep' = {
   name: 'keyvault-secret'
   params: {
     keyVaultName: keyVaultName

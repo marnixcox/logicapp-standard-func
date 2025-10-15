@@ -28,7 +28,7 @@ module monitoring './monitoring.bicep' = {
 }
 
 // KeyVault 
-module keyvault './keyvault.bicep' = {
+module keyvault './keyvault/keyvault.bicep' = {
   name: '${deployment().name}-keyvault'
   params: {
     location: location
@@ -43,7 +43,7 @@ module keyvault './keyvault.bicep' = {
 }
 
 // Storage for Azure Functions and Logic Apps 
-module storage './storage.bicep' = {
+module storage './storage/storage.bicep' = {
   name: '${deployment().name}-storage'
   params: {
     location: location
@@ -61,13 +61,13 @@ module storage './storage.bicep' = {
 module logicIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.2.1' = {
   name: 'logicIdentity'
   params: {
-    name: '${abbrs.managedIdentityUserAssignedIdentities}${abbrs.logicWorkflows}${resourceToken}'
+    name: '${abbrs.managedIdentityUserAssignedIdentities}${abbrs.logicWorkflows}${resourceToken}-${environmentName}'
     location: location
   }
 }
 
 // Logic App Standard Workflows with shared plan
-module workflows './workflows.bicep' = {
+module workflows './logicapp/workflows.bicep' = {
   name: '${deployment().name}-workflows'
   params: {
     location: location
@@ -92,11 +92,12 @@ module workflows './workflows.bicep' = {
 module functionsIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.2.1' = {
   name: 'functionsIdentity'
   params: {
-    name: '${abbrs.managedIdentityUserAssignedIdentities}${abbrs.webSitesFunctions}${resourceToken}'
+    name: '${abbrs.managedIdentityUserAssignedIdentities}${abbrs.webSitesFunctions}${resourceToken}-${environmentName}'
     location: location
   }
 }
 
+// Environment specific settings for Function App
 var functionEnvironmentSettings = {
   dev: {
     catServiceUrl: 'https://cat-fact.herokuapp.com/facts/'
@@ -117,7 +118,7 @@ var functionEnvironmentSettings = {
 }
 
 // FunctionApp including plan
-module functions './functions.bicep' = {
+module functions './functions/functions.bicep' = {
   name: '${deployment().name}-functions'
   params: {
     location: location
@@ -131,8 +132,8 @@ module functions './functions.bicep' = {
     storageAccountName: storage.outputs.storageAccountName
     userAssignedIdentity: functionsIdentity.outputs.resourceId
     appsettings: {
-      CatServiceUrl:  functionEnvironmentSettings[environmentName].catServiceUrl
-      VehicleServiceUrl:  functionEnvironmentSettings[environmentName].vehicleServiceUrl
+      CatServiceUrl:  functionEnvironmentSettings[environmentName].catServiceUrl // example of environment specific setting
+      VehicleServiceUrl:  functionEnvironmentSettings[environmentName].vehicleServiceUrl 
     }
   }
   dependsOn: []

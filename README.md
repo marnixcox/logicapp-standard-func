@@ -34,6 +34,10 @@ The following folder structure is created.
 
 ```
 ├── infra                      [ Infrastructure As Code files ]
+│   ├── functions              [ Key Vault files ]
+│   ├── keyvault               [ Key Vault files ]
+│   ├── logicapp               [ Logic app files ]
+│   ├── storage                [ Storage files ]
 │   ├── main.bicep             [ Main infrastructure file ]
 │   └── main.parameters.json   [ Parameters file ]
 ├── src                        [ Application code ]
@@ -42,6 +46,18 @@ The following folder structure is created.
 └── azure.yaml                 [ Describes the app and type of Azure resources ]
 
 ```
+
+### Key Infrastructure Files
+- `functions/functions.bicep` - Functions
+- `functions/functions-key.bicep` - Store function app key
+- `keyvault/keyvault-secret.bicep` - Store keyvault secret
+- `keyvault/keyvault.bicep` - Key Vault
+- `logicapp/workflows.bicep` - Logic App Standard 
+- `storage/storage.bicep` - Storage account
+- `main.bicep` - Main orchestration
+- `monitoring.bicep` - Observability stack
+- `resources.bicep` - Resource collection
+
 
 ### Prerequisites
 
