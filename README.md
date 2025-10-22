@@ -75,7 +75,11 @@ Let's first provision the infra components. Add a `resourceToken` parameter to t
 
 - Run `azd provision`
 
+#### Environment
+
 First time an environment name, subscription and location need to be selected. These will then be stored in the `.azure` folder.
+
+Allowed values for environment are `dev` `tst` `acc` `prd`
 
 <img src="assets/env.png" width="75%" alt="Select environment, subscription">
 
